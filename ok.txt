@@ -1,6 +1,6 @@
 import tkinter as tk
 import customtkinter
-from widgets.molecules import ScrollFrame,MessageFrame,Frame
+from widgets.molecules import ScrollFrame,MessageFrame
 
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("dark-blue")
@@ -28,12 +28,12 @@ class App(customtkinter.CTk):
 
     def create_sidebar_frame(self):
         sidebar_frame = ScrollFrame(self, width=300)
-        sidebar_frame.grid(row=0, column=0, rowspan=9, sticky="nsew", padx=(5, 5), pady=(5, 5))
+        sidebar_frame.grid(row=0, column=0, rowspan=6, sticky="nsew", padx=(5, 5), pady=(5, 5))
         sidebar_frame.grid_rowconfigure(4, weight=1)
 
     def create_entry_and_button(self):
         self.entry = customtkinter.CTkEntry(self, placeholder_text="Enter Your Prompt Here")
-        self.entry.grid(row=8, column=1, columnspan=2, padx=(5, 0), pady=(5, 5), sticky="nsew")
+        self.entry.grid(row=5, column=1, columnspan=2, padx=(5, 0), pady=(5, 5), sticky="nsew")
 
         # Create the button
         entry_button = customtkinter.CTkButton(master=self, fg_color="#1e38bd", border_width=2,
