@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter
 from widgets.molecules import ScrollFrame, MessageFrame, Frame
+from widgets.chat_label import Chat_Label
 
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("dark-blue")
@@ -28,7 +29,12 @@ class App(customtkinter.CTk):
     def create_sidebar_frame(self):
         sidebar_frame = ScrollFrame(self, width=300)
         sidebar_frame.grid(row=0, column=0, rowspan=9, sticky="nsew", padx=(5, 5), pady=(5, 5))
-        sidebar_frame.grid_rowconfigure(4, weight=1)
+        sidebar_frame.grid_rowconfigure(0, weight=1)  # Allow the frame to expand vertically
+
+        names = ["Affffffffffffffffffffffffffffffffffffff", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+                 "U", "V", "W", "X", "Y", "Z"]
+        for row, name in enumerate(names):
+            Chat_Label(sidebar_frame, label_text=name).grid(row=row, column=0, sticky="nsew",padx=(5, 5), pady=(5, 5))
 
     def create_input_section(self):
         input_frame = Frame(self)
@@ -65,7 +71,7 @@ class App(customtkinter.CTk):
         # Create a message frame for the message
         message_frame = MessageFrame(self.chat_frame, text, sender)
 
-        message_frame.grid(row=len(self.message_frames), column=0, sticky="w", columnspan=4, padx=(5, 0), pady=(5, 5))
+        message_frame.grid(row=len(self.message_frames), column=0, sticky="e", columnspan=4, padx=(5, 0), pady=(5, 5))
 
         # Add the message frame to the chat frame
         self.message_frames.append(message_frame)
