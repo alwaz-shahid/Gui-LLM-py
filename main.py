@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter
-from widgets.molecules import ScrollFrame, MessageFrame, Frame
-from widgets.chat_label import Chat_Label
+from widgets.molecules import ScrollFrame, MessageFrame, Frame, MyTabView,Chat_Label
+
 
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("dark-blue")
@@ -11,6 +11,8 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
+        self.tab_view = None
+        self.sidebar_frame = None
         self.tabview = None
         self.chat_frame = None
         self.entry = None
@@ -29,34 +31,35 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure((0, 1, 2, 4, 5, 6, 7), weight=1)
 
     def create_sidebar_frame(self):
-        sidebar_frame = ScrollFrame(self, width=300)
-        sidebar_frame.grid(row=0, column=0, rowspan=9, sticky="nsew", padx=(5, 5), pady=(5, 5))
-        sidebar_frame.grid_rowconfigure(0, weight=1)  # Allow the frame to expand vertically
+        self.sidebar_frame = ScrollFrame(self, width=300)
+        self.sidebar_frame.grid(row=0, column=0, rowspan=9, sticky="nsew", padx=(5, 5), pady=(5, 5))
+        self.sidebar_frame.grid_rowconfigure(0, weight=1)  # Allow the frame to expand vertically
 
-        tab_frame = Frame(self)
-        tab_frame.grid(row=0, column=1, padx=(10, 0), pady=(10, 10), sticky="nsew")
-        # Configure tab_frame to expand with the grid cell
-        tab_frame.grid_rowconfigure(0, weight=1)
+        tab_names = ["Chats", "p&m"]
+        tab_widgets = [customtkinter.CTkLabel(master=self.sidebar_frame, text="Chats"),
+                       customtkinter.CTkButton(master=self.sidebar_frame, text="Click me!")]
+        self.tab_view = MyTabView(master=self.sidebar_frame, tab_names=tab_names, tab_widgets=tab_widgets)
+        self.tab_view.grid(row=0, column=0, sticky="n")
 
-        tab_frame.grid_columnconfigure((0, 1, 2), weight=1)
+        # Add frames to individual tabs
+        self.tab_view.tabs["Chats"].grid_columnconfigure(0, weight=1)  # configure grid of "Chats" tab
+        self.tab_view.tabs["p&m"].grid_columnconfigure(0, weight=1)  # configure grid of "p&m" tab
 
-        # create tabview
-        self.tabview = customtkinter.CTkTabview(tab_frame, width=250)  # move tabview inside sidebar_frame
-        self.tabview.grid(row=0, column=0, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        self.tabview.add("Tab 1")  # Add first tab
-        self.tabview.add("Tab 2")  # Add second tab
-        self.tabview.add("Tab 3")  # Add third tab
+        self.optionmenu_1 = customtkinter.CTkOptionMenu(self.tab_view.tabs["Chats"], dynamic_resizing=False,
+                                                        values=["Value 1", "Value 2", "Value Long Long Long"])
+        self.optionmenu_1.grid(row=0, column=0, padx=20, pady=(20, 10))
+        self.combobox_1 = customtkinter.CTkComboBox(self.tab_view.tabs["Chats"],
+                                                    values=["Value 1", "Value 2", "Value Long....."])
+        # self.tabview.add("Tab 1")  # Add first tab
+        # self.tabview.add("Tab 2")  # Add second tab
+        # self.tabview.add("Tab 3")  # Add third tab
+        # self.tabview.set("Tab 1")
+        # 
+        # # Create and add components to each tab
+        # tab1_frame = self.tabview.tab("Tab 1")
+        # tab1_frame.grid(row=0, column=0, sticky="nsew",)
 
-        # Create and add components to each tab
-        tab1_frame = self.tabview.tab("Tab 1")
-        tab1_frame.grid(row=0, column=0, sticky="nsew")
 
-        # Add components to tab1 frame
-        names = ["Affffffffffffffffffffffffffffffffffffff", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-                 "N", "O", "P", "Q", "R", "S", "T",
-                 "U", "V", "W", "X", "Y", "Z"]
-        for row, name in enumerate(names):
-            Chat_Label(tab1_frame, label_text=name).grid(row=row, column=0, sticky="nsew", padx=(5, 5), pady=(5, 5))
 
     def create_input_section(self):
         input_frame = Frame(self)
